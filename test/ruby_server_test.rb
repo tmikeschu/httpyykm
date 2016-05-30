@@ -22,7 +22,7 @@ class RubyServerTest < Minitest::Test
 
   def test_it_responds_to_an_HTTP_request
     skip
-    # result = Faraday.new
+    result = Faraday.new
     server = RubyServer.new
     server.process_request
     response = result.get 'http://127.0.0.1:9292'
@@ -32,7 +32,7 @@ class RubyServerTest < Minitest::Test
   def test_number_of_times_requested_while_active_defaults_to_0
     skip
     my_server = RubyServer.new
-    assert_equal 0, server.times_requested
+    assert_equal 0, my_server.times_requested
   end
 
   def test_it_can_maintain_an_open_server

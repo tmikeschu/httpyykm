@@ -14,7 +14,12 @@ class RubyServer
   def process_request
     client = server.accept
     @times_requested += 1
-    body = "<html><head></head><body>Hello, World! (#{times_requested})</body></html>"
+    request_lines = []
+    while line = client.gets and !line.chomp.empty?
+      request_lines << line.chomp
+    end
+    response = "<pre>" + request_lines.join("\n") + "</pre>"
+    body = "<html><head></head><body>Hello, World! (#{times_requested})\n\n#{response}</body></html>"
     client.puts headers(body)
     client.puts body
     client.close
@@ -33,4 +38,5 @@ class RubyServer
       process_request
     end
   end
+
 end
