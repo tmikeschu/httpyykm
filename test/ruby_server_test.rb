@@ -20,14 +20,14 @@ class RubyServerTest < Minitest::Test
     assert_equal 9291, my_server.port
   end
 
-  # def test_it_responds_to_an_HTTP_request
-  #   skip
-  #   result = Faraday.new
-  #   server = RubyServer.new
-  #   server.process_request
-  #   response = result.get 'http://127.0.0.1:9292'
-  #   assert_equal 'Hello', response.body
-  # end
+  def test_it_responds_to_an_HTTP_request
+    skip
+    # result = Faraday.new
+    server = RubyServer.new
+    server.process_request
+    response = result.get 'http://127.0.0.1:9292'
+    assert_equal 'Hello', response.body
+  end
 
   def test_number_of_times_requested_while_active_defaults_to_0
     skip
