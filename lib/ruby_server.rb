@@ -2,16 +2,19 @@ require 'socket'
 
 class RubyServer
   attr_reader :server,
-              :port
+              :port,
+              :times_requested
 
   def initialize(port = 9292)
     @server = TCPServer.new(port)
     @port = port
+    @times_requested = 0
   end
 
   def process_request
     client = server.accept
-    body = '<html><head></head><body>Hello</body></html>'
+    @times_requested += 1
+    body = "<html><head></head><body>Hello, World! (#{times_requested})</body></html>"
     client.puts headers(body)
     client.puts body
     client.close
@@ -23,5 +26,11 @@ class RubyServer
                'server: ruby',
                'content-type: text/html; charset=iso-8859-1',
                "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+  end
+
+  def keep_open
+    while true
+      process_request
+    end
   end
 end
