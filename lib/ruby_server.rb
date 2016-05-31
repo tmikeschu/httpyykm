@@ -1,10 +1,13 @@
 require 'socket'
+require './lib/parse_and_format'
 
 class RubyServer
   attr_reader :server,
               :port,
               :hello_requests,
               :all_requests
+
+  include ParseAndFormat
 
   def initialize(port = 9292)
     @server = TCPServer.new(port)
@@ -16,15 +19,20 @@ class RubyServer
   def process_request
     client = server.accept
     @all_requests += 1
-    request_lines = []
-    while line = client.gets and !line.chomp.empty?
-      request_lines << line.chomp
-    end
-    response = set_response_from_path(request_lines)
+    lines = request_lines(client)
+    response = set_response_from_path(lines)
     body = "<html><head></head><body>#{response}</body></html>"
     client.puts headers(body)
     client.puts body
     client.close
+  end
+
+  def request_lines(client)
+    received = []
+    while line = client.gets and !line.chomp.empty?
+      received << line.chomp
+    end
+    received
   end
 
   def headers(output)
@@ -41,46 +49,15 @@ class RubyServer
     end
   end
 
-  def debugger(lines)
-    data = comb_and_assign_to_debugger(lines)
-    format_for_request_output(data)
-  end
-
-  def comb_and_assign_to_debugger(lines)
-    output = Hash.new
-    lines.each do |line|
-      if line.include?('HTTP')
-        output[:Verb] = line[0...line.index('/')].strip
-        output[:Path] = line[line.index('/')...line.index('HTTP')].strip
-        output[:Protocol] = line[-8..-1]
-      elsif line.include?('Host')
-        output[:Host] = line.split(':')[1].strip
-        output[:Port] = line.split(':')[2]
-        output[:Origin] = `ipconfig getifaddr en0`.chomp.to_s
-      end
-      output[:Accept] = line.split(':')[1].strip if line.include?('Accept:')
-    end
-    output
-  end
-
-  def format_for_request_output(output)
-    output.to_a.map {|key, value| "#{key}: #{value}"}.join("\n")
-  end
-
-  def requested_path(lines)
-    data = comb_and_assign_to_debugger(lines)
-    data[:Path]
-  end
-
-  def set_response_from_path(request_lines)
-    if requested_path(request_lines) == '/'
-      "<pre>" + debugger(request_lines) + "</pre>"
-    elsif requested_path(request_lines) == '/hello'
+  def set_response_from_path(lines)
+    if requested_path(lines) == '/'
+      "<pre>" + debugger(lines) + "</pre>"
+    elsif requested_path(lines) == '/hello'
       @hello_requests += 1
       "Hello, World! (#{hello_requests})"
-    elsif requested_path(request_lines) == '/datetime'
+    elsif requested_path(lines) == '/datetime'
       Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
-    elsif requested_path(request_lines) == '/shutdown'
+    elsif requested_path(lines) == '/shutdown'
       server.close
       "Total Requests: #{all_requests}"
     end
