@@ -20,17 +20,7 @@ class RubyServer
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
-    if requested_path(request_lines) == '/'
-      response = "<pre>" + debugger(request_lines) + "</pre>"
-    elsif requested_path(request_lines) == '/hello'
-      @hello_requests += 1
-      response = "Hello, World! (#{hello_requests})"
-    elsif requested_path(request_lines) == '/datetime'
-      response = Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
-    elsif requested_path(request_lines) == '/shutdown'
-      response = "Total Requests: #{all_requests}"
-      server.close
-    end
+    response = set_response_from_path(request_lines)
     body = "<html><head></head><body>#{response}</body></html>"
     client.puts headers(body)
     client.puts body
@@ -80,6 +70,20 @@ class RubyServer
   def requested_path(lines)
     data = comb_and_assign_to_debugger(lines)
     data[:Path]
+  end
+
+  def set_response_from_path(request_lines)
+    if requested_path(request_lines) == '/'
+      "<pre>" + debugger(request_lines) + "</pre>"
+    elsif requested_path(request_lines) == '/hello'
+      @hello_requests += 1
+      "Hello, World! (#{hello_requests})"
+    elsif requested_path(request_lines) == '/datetime'
+      Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
+    elsif requested_path(request_lines) == '/shutdown'
+      server.close
+      "Total Requests: #{all_requests}"
+    end
   end
 
 end
