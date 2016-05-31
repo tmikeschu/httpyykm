@@ -23,9 +23,9 @@ class RubyServerTest < Minitest::Test
     my_server.server.close
   end
 
-  def test_number_of_times_requested_while_active_defaults_to_0
+  def test_number_of_times_requested_while_active_defaults_to_-1
     my_server = RubyServer.new
-    assert_equal 0, my_server.times_requested
+    assert_equal -1, my_server.times_requested
     my_server.server.close
   end
 

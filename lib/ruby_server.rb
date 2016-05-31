@@ -8,7 +8,7 @@ class RubyServer
   def initialize(port = 9292)
     @server = TCPServer.new(port)
     @port = port
-    @times_requested = 0
+    @times_requested = -1
   end
 
   def process_request
