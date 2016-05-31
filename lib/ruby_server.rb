@@ -3,25 +3,37 @@ require 'socket'
 class RubyServer
   attr_reader :server,
               :port,
-              :times_requested
+              :hello_requests,
+              :all_requests
 
   def initialize(port = 9292)
     @server = TCPServer.new(port)
     @port = port
-    @times_requested = -1
+    @hello_requests = -1
+    @all_requests = 0
   end
 
   def process_request
     client = server.accept
-    @times_requested += 1
+    @all_requests += 1
     request_lines = []
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
-    response = "<pre>" + debugger(request_lines) + "</pre>"
-    body = "<html><head></head><body>Hello, World! (#{times_requested})\n\n#{response}</body></html>"
+    if requested_path(request_lines) == '/'
+      response = "<pre>" + debugger(request_lines) + "</pre>"
+    elsif requested_path(request_lines) == '/hello'
+      @hello_requests += 1
+      response = "Hello, World! (#{hello_requests})"
+    elsif requested_path(request_lines) == '/datetime'
+      response = Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
+    elsif requested_path(request_lines) == '/shutdown'
+      response = "Total Requests: #{all_requests}"
+      server.close
+    end
+    body = "<html><head></head><body>#{response}</body></html>"
     client.puts headers(body)
-    client.puts body #only if path is /hello
+    client.puts body
     client.close
   end
 
@@ -65,9 +77,9 @@ class RubyServer
     output.to_a.map {|key, value| "#{key}: #{value}"}.join("\n")
   end
 
+  def requested_path(lines)
+    data = comb_and_assign_to_debugger(lines)
+    data[:Path]
+  end
+
 end
-
-
-
-# #/datetime
-Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
