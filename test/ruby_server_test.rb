@@ -38,14 +38,12 @@ class RubyServerTest < Minitest::Test
   # Note: RubyServer must be running separately for the following tests to pass
 
   def test_it_responds_to_an_HTTP_request
-    # skip
     request = Faraday.new
     response = request.get 'http://127.0.0.1:9292'
     assert_instance_of String, response.body
   end
 
   def test_it_can_format_request_lines_for_debugger
-    # skip
     my_server = RubyServer.new
     lines = ["GET / HTTP/1.1", "Host: 127.0.0.1:9292", "Connection: keep-alive",
              "Cache-Control: no-cache", "User-Agent: Mozilla/5.0",
@@ -57,19 +55,15 @@ class RubyServerTest < Minitest::Test
   end
 
   def test_if_root_is_requested_HTTP_responds_with_full_debug
-    # skip
     request = Faraday.new
     response = request.get 'http://127.0.0.1:9292'
     refute_equal 'Hello, World!', response.body[25...38]
   end
 
   def test_if_root_hello_is_requested_HTTP_responds_with_hello_counter_only
-    # skip
     request = Faraday.new
     response = request.get 'http://127.0.0.1:9292/hello'
     assert_equal 'Hello, World!', response.body[25...38]
   end
-
-  
 
 end
