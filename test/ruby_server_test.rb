@@ -37,10 +37,10 @@ class RubyServerTest < Minitest::Test
     assert_instance_of String, response.body
   end
 
-  def test_it_keeps_track_of_times_requested_while_active
-    skip
+  def test_it_responds_to_an_HTTP_request_in_a_formatted_manner
     request = Faraday.new
-    response_two = request.get 'http://127.0.0.1:9292'
-    assert_equal "Hello, World! (2)", response_two.body[25..41]
+    response = request.get 'http://127.0.0.1:9292'
+    assert_equal 'Verb:', response.body[50..54]
   end
+
 end
