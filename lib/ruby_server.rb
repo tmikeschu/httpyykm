@@ -21,7 +21,7 @@ class RubyServer
     response = "<pre>" + debugger(request_lines) + "</pre>"
     body = "<html><head></head><body>Hello, World! (#{times_requested})\n\n#{response}</body></html>"
     client.puts headers(body)
-    client.puts body
+    client.puts body #only if path is /hello
     client.close
   end
 
@@ -66,3 +66,8 @@ class RubyServer
   end
 
 end
+
+
+
+# #/datetime
+Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
