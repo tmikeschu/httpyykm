@@ -52,11 +52,11 @@ class RubyServer
         output[:Path] = line[line.index('/')...line.index('HTTP')].strip
         output[:Protocol] = line[-8..-1]
       elsif line.include?('Host')
-        output[:Host] = line.split(':')[1]
+        output[:Host] = line.split(':')[1].strip
         output[:Port] = line.split(':')[2]
         output[:Origin] = `ipconfig getifaddr en0`.chomp.to_s
       end
-      output[:Accept] = line.split(':')[1] if line.include?('Accept')
+      output[:Accept] = line.split(':')[1].strip if line.include?('Accept:')
     end
     output
   end
