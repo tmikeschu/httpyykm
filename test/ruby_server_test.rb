@@ -66,4 +66,14 @@ class RubyServerTest < Minitest::Test
     assert_equal 'Hello, World!', response.body[25...38]
   end
 
+#move this test to the ruby test file
+  def test_that_dictionary_file_is_available
+    my_server = RubyServer.new
+    my_server.word_search('apple')
+
+    assert_equal 'apple', my_server.word_search('apple')
+  end
+
+  
+
 end

@@ -27,6 +27,8 @@ class RubyServer
       response = "Hello, World! (#{hello_requests})"
     elsif requested_path(request_lines) == '/datetime'
       response = Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
+    elsif requested_path(request_lines)[0..11] == '/word_search'
+      response = word_search
     elsif requested_path(request_lines) == '/shutdown'
       response = "Total Requests: #{all_requests}"
       server.close
@@ -35,6 +37,12 @@ class RubyServer
     client.puts headers(body)
     client.puts body
     client.close
+  end
+
+  def word_search
+    dictionary = File.readlines("/usr/share/dict/words")
+    formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
+    p formatted_dictionary[0]
   end
 
   def headers(output)
