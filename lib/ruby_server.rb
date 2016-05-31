@@ -33,6 +33,11 @@ class RubyServer
       received << line.chomp
     end
     received
+
+  def word_search
+    dictionary = File.readlines("/usr/share/dict/words")
+    formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
+    p formatted_dictionary[0]
   end
 
   def headers(output)
