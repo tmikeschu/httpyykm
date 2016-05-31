@@ -43,17 +43,6 @@ class RubyServerTest < Minitest::Test
     assert_instance_of String, response.body
   end
 
-  def test_it_can_format_request_lines_for_debugger
-    my_server = RubyServer.new
-    lines = ["GET / HTTP/1.1", "Host: 127.0.0.1:9292", "Connection: keep-alive",
-             "Cache-Control: no-cache", "User-Agent: Mozilla/5.0",
-             "Postman-Token: 602c9eaf-23a7-276a-f55b-59f1cf0ee4c2",
-             "Accept: */*, Accept-Encoding: gzip, deflate, Accept-Language: en-US"]
-    result = "Verb: GET\nPath: /\nProtocol: HTTP/1.1\nHost: 127.0.0.1\nPort: 9292\nOrigin: #{`ipconfig getifaddr en0`.chomp.to_s}\nAccept: */*, Accept-Encoding"
-    assert_equal result, my_server.debugger(lines)
-    my_server.server.close
-  end
-
   def test_if_root_is_requested_HTTP_responds_with_full_debug
     request = Faraday.new
     response = request.get 'http://127.0.0.1:9292'
