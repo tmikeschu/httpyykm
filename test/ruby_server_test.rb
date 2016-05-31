@@ -43,4 +43,18 @@ class RubyServerTest < Minitest::Test
     assert_equal 'Verb:', response.body[50..54]
   end
 
+  def test_if_root_is_requested_HTTP_responds_with_full_debug
+    request = Faraday.new
+    response = request.get 'http://127.0.0.1:9292'
+    #assert debugger
+  end
+
+  def test_if_root_hello_is_requested_HTTP_responds_with_hello_counter_only
+    request = Faraday.new
+    response = request.get 'http://127.0.0.1:9292/hello'
+    assert_equal 'Hello, World!', response.body[0...12]
+    # assert_equal 16.response.body.length
+  end
+#counter doesn't increment if other path is selected
+
 end
