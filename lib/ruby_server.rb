@@ -18,7 +18,7 @@ class RubyServer
     while line = client.gets and !line.chomp.empty?
       request_lines << line.chomp
     end
-    response = "<pre>" + request_lines.join("\n") + "</pre>"
+    response = "<pre>" + debugger(request_lines) + "</pre>"
     body = "<html><head></head><body>Hello, World! (#{times_requested})\n\n#{response}</body></html>"
     client.puts headers(body)
     client.puts body
@@ -43,35 +43,17 @@ class RubyServer
     output = Hash.new
     lines.each do |line|
       if line.include?('GET') || line.include?('POST')
-        
-      output[:Verb] = line[0-4].strip if line.include?('GET') || line.include?('POST')
-      output[:Path] = line[] if
-      output[:Protocol] =
-      output[:Host] =
-      output[:Port] =
-      output[:Origin] =
-      output[:Accept] =
+        output[:Verb] = line[0..3].strip
+        output[:Path] = line[line.index('/')...line.index('HTTP')].strip
+        output[:Protocol] = line[-8..-1]
+      elsif line.include?('Host')
+        output[:Host] = line.split(':')[1]
+        output[:Port] = line.split(':')[2]
+        output[:Origin] = line.split(':')[1]
+      end
+      output[:Accept] = line.split(':')[1] if line.include?('Accept')
     end
-    output
-    # Desired:
-    # Verb: POST
-    # Path: /
-    # Protocol: HTTP/1.1
-    # Host: 127.0.0.1
-    # Port: 9292
-    # Origin: 127.0.0.1
-    # Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
-    # request_lines currently produces:
-    # VERB/PATH/PROTOCOL: GET / HTTP/1.1
-    # Host: 127.0.0.1:9292
-    # Connection: keep-alive
-    # Cache-Control: no-cache
-    # User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Postman/4.2.2 Chrome/47.0.2526.73 Electron/0.36.2 Safari/537.36
-    # Postman-Token: 8babde6f-141e-1616-86fd-34c9c981e9f3
-    # Accept: */*
-    # Accept-Encoding: gzip, deflate
-    # Accept-Language: en-US
-
+    output.to_a.map {|key, value| "#{key}: #{value}"}.join("\n")
   end
 
 end
