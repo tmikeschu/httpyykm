@@ -21,17 +21,17 @@ class RubyServer
     client = server.accept
     @all_requests += 1
     lines = request_lines(client)
-    check_and_set_guess(read_from_post_request(client, find_content_length(lines)))
+    user_guess = read_from_post_request(client, find_content_length(lines))
+    check_and_set_guess(lines, user_guess)
     response = set_response_from_path(lines)
     body = "<html><head></head><body>#{response}</body></html>"
-    if requested_path(lines)[0..4] == '/game' && post?(lines)
-      client.puts headers(body, "302 redirect")
+    if requested_path(lines) == '/game?guess' && post?(lines)
+      client.puts headers(body, "302 Redirect", 'http://127.0.0.1:9292/game')
     else
       client.puts headers(body)
     end
     client.puts body
     client.close
-    require 'pry'; binding.pry
   end
 
   def request_lines(client)
@@ -80,15 +80,14 @@ class RubyServer
       create_game
     elsif requested_path(lines) == '/game' && get?(lines)
       if active_game?
-        @game.status
+        @game.status + "\n\n" +
+        @game.compare_guess(@game.secret_number, @game.guess)
       else
         "You haven't started a game yet. POST to /start_game first."
       end
     elsif requested_path(lines)[0..4] == '/game' && post?(lines)
       if active_game?
-        binding.pry
         @game.num_guesses += 1
-        @game.compare_guess(@game.secret_number, @game.guess)
       else
         "You haven't started a game yet. POST to /start_game first."
       end
@@ -99,8 +98,8 @@ class RubyServer
     defined?(@game) != nil
   end
 
-  def check_and_set_guess(user_guess)
-    @game.guess = user_guess if active_game?
+  def check_and_set_guess(lines, user_guess)
+    @game.guess = user_guess if active_game? && post?(lines)
   end
 
   def create_game
