@@ -4,7 +4,9 @@ module GameMechanics
   end
 
   def compare_guess(secret, guess)
-    secret == guess
+    return "Your guess is correct!" if secret == guess
+    secret > guess ? difference = "too low." : difference = "too high."
+    "Your guess is #{difference}"
   end
-
+  
 end
