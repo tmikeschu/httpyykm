@@ -62,7 +62,6 @@ class RubyServerTest < Minitest::Test
   end
 
   def test_HTTP_response_for_start_game_path_for_post
-    skip
     request = Faraday.new
     response = request.post 'http://127.0.0.1:9292/start_game'
     assert_equal 'Good luck!', response.body[25...35]

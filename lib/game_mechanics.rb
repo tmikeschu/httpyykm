@@ -8,5 +8,5 @@ module GameMechanics
     secret > guess ? difference = "too low." : difference = "too high."
     "Your guess is #{difference}"
   end
-  
+
 end
