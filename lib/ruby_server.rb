@@ -58,7 +58,7 @@ class RubyServer
     elsif requested_path(lines) == '/datetime'
       Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
     elsif requested_path(lines)[0..11] == '/word_search'
-      "#{(requested_path(lines)[18..-1]).upcase} is #{word_search(lines)} word"
+      "#{find_word(lines).upcase} is #{word_search(find_word(lines))} word"
     elsif requested_path(lines) == '/shutdown'
       server.close
       "Total Requests: #{all_requests}"
