@@ -1,5 +1,6 @@
 require 'socket'
 require './lib/parse_and_format'
+require './lib/game'
 
 class RubyServer
   attr_reader :server,
@@ -62,6 +63,17 @@ class RubyServer
     elsif requested_path(lines) == '/shutdown'
       server.close
       "Total Requests: #{all_requests}"
+    else
+      set_response_for_game_paths(lines)
+    end
+  end
+
+
+  def set_response_for_game_paths(lines)
+    if requested_path(lines) == '/start_game'
+      "Good Luck!"
+    elsif requested_path(lines)[0..5] == '/game' && check_type_of_request(lines) == "GET"
+      "You've taken xx guesses."
     end
   end
 

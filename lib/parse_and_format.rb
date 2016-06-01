@@ -40,4 +40,9 @@ module ParseAndFormat
     requested_path(lines)[18..-1]
   end
 
+  def check_type_of_request(lines)
+    data = comb_and_assign_to_debugger(lines)
+    data[:Verb]
+  end
+
 end
