@@ -14,4 +14,8 @@ class ParseAndFormatTest < Minitest::Test
     assert_equal result, debugger(lines)
   end
 
+  def test_if_loads_the_dictionary_file
+    skip
+  end
+
 end
