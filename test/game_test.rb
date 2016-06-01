@@ -19,4 +19,10 @@ class GameTest < Minitest::Test
     possible_range = (0..100).to_a
     assert possible_range.include?(game.secret_number)
   end
+
+  def test_it_has_a_message_for_guesses_taken
+    game = Game.new
+    message = "You've taken 0 guesses."
+    assert_equal message, game.status
+  end
 end

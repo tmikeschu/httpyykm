@@ -17,7 +17,11 @@ class Game
     'Good luck!'
   end
 
-  
+  def status
+    "You've taken #{num_guesses} guesses."
+  end
+
+
 
 
 
