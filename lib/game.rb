@@ -14,4 +14,8 @@ class Game
     rand_number
     "Good luck!"
   end
+
+  def compare_guess
+  end
+  
 end

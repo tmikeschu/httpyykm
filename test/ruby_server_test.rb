@@ -61,4 +61,10 @@ class RubyServerTest < Minitest::Test
     assert_equal 'TREE is a known word', response.body[25...45]
   end
 
+  def test_HTTP_response_for_start_game_path
+    request = Faraday.new
+    response = request.get 'http://127.0.0.1:9292/start_game'
+    assert_equal 'Good Luck!', response.body[25...35]
+  end
+
 end
