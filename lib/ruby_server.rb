@@ -77,7 +77,14 @@ class RubyServer
       else
         "You've taken #{@game.num_guesses} guesses."
       end
+    elsif requested_path(lines)[0..4] == '/game' && post?(lines)
+      parse_game_post_request(lines)
     end
+  end
+
+  def parse_game_post_request(lines)
+    @game.num_guesses += 1
+
   end
 
   def create_game

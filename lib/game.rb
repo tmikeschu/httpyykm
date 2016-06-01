@@ -16,4 +16,9 @@ class Game
     @secret_number = rand_number
     'Good luck!'
   end
+
+  
+
+
+
 end
