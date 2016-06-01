@@ -71,10 +71,6 @@ class RubyServerTest < Minitest::Test
     response = Faraday.get 'http://127.0.0.1:9292/game'
     message = "You haven't started a game yet. POST to /start_game first."
     assert_equal message, response.body[25...83]
-    Faraday.post 'http://127.0.0.1:9292/start_game'
-    response = Faraday.get 'http://127.0.0.1:9292/game'
-    message = "You've taken 0 guesses."
-    assert_equal message, response.body[25...48]
   end
 
 end
