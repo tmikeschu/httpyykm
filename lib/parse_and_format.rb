@@ -17,6 +17,7 @@ module ParseAndFormat
         output[:Origin] = `ipconfig getifaddr en0`.chomp.to_s
       end
       output[:Accept] = line.split(':')[1].strip if line.include?('Accept:')
+      output[:Content_Length] = line.split(':')[1].strip if line.include?('Content-Length')
     end
     output
   end
@@ -45,7 +46,13 @@ module ParseAndFormat
     data[:Verb]
   end
 
+  def find_content_length(lines)
+    data = comb_and_assign_to_debugger(lines)
+    data[:Content_Length]
+  end
 
-
+  def read_from_post_request(client, content_length)
+    client.read(content_length)
+  end
 
 end
