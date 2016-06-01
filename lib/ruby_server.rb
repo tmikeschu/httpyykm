@@ -33,11 +33,6 @@ class RubyServer
       received << line.chomp
     end
     received
-
-  def word_search
-    dictionary = File.readlines("/usr/share/dict/words")
-    formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
-    p formatted_dictionary[0]
   end
 
   def headers(output)
@@ -62,6 +57,8 @@ class RubyServer
       "Hello, World! (#{hello_requests})"
     elsif requested_path(lines) == '/datetime'
       Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
+    elsif requested_path(lines)[0..11] == '/word_search'
+      "#{(requested_path(lines)[18..-1]).upcase} is #{word_search(lines)} word"
     elsif requested_path(lines) == '/shutdown'
       server.close
       "Total Requests: #{all_requests}"

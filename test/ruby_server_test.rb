@@ -55,4 +55,10 @@ class RubyServerTest < Minitest::Test
     assert_equal 'Hello, World!', response.body[25...38]
   end
 
+  def test_it_can_take_a_word_parameter_and_search_the_dictionary
+    request = Faraday.new
+    response = request.get 'http://127.0.0.1:9292/word_search?word=tree'
+    assert_equal 'TREE is a known word', response.body[25...45]
+  end
+
 end
