@@ -14,10 +14,9 @@ class ParseAndFormatTest < Minitest::Test
     assert_equal result, debugger(lines)
   end
 
-  def test_it_loads_the_dictionary_file #let's discuss this test tomorrow
-    skip
-    assert_equal "a", dictionary[0]
-    assert_equal "abandon", dictionary[45]
+  def test_it_can_find_a_word_in_the_dictionary
+    assert_equal "a known", word_search('test')
+    assert_equal "not a known", word_search('ahstd')
   end
 
 end
