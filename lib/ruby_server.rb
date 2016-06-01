@@ -71,7 +71,8 @@ class RubyServer
 
   def set_response_for_game_paths(lines)
     if requested_path(lines) == '/start_game'
-      "Good Luck!"
+      game = Game.new
+      game.start_game
     elsif requested_path(lines)[0..5] == '/game' && check_type_of_request(lines) == "GET"
       "You've taken xx guesses."
     end
