@@ -1,3 +1,5 @@
+require 'socket'
+
 module ParseAndFormat
   def debugger(lines)
     data = comb_and_assign_to_debugger(lines)
@@ -48,11 +50,11 @@ module ParseAndFormat
 
   def find_content_length(lines)
     data = comb_and_assign_to_debugger(lines)
-    data[:Content_Length]
+    data[:Content_Length].to_i
   end
 
   def read_from_post_request(client, content_length)
-    client.read(content_length)
+    client.read(content_length).to_i
   end
 
 end

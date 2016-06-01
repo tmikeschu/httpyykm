@@ -29,6 +29,7 @@ class RubyServer
       client.puts headers(body)
     end
     client.puts body
+    @guess = read_from_post_request(client, find_content_length(lines))
     client.close
   end
 
@@ -77,19 +78,23 @@ class RubyServer
     if requested_path(lines) == '/start_game' && post?(lines)
       create_game
     elsif requested_path(lines) == '/game' && get?(lines)
-      if defined?(@game) == nil
-        "You haven't started a game yet. POST to /start_game first."
+      if active_game?
+        @game.status
       else
-        "You've taken #{@game.num_guesses} guesses."
+        "You haven't started a game yet. POST to /start_game first."
       end
     elsif requested_path(lines)[0..4] == '/game' && post?(lines)
-      parse_game_post_request(lines)
+      if active_game?
+        @game.num_guesses += 1
+        @game.compare_guess(@game.secret_number, @guess)
+      else
+        "You haven't started a game yet. POST to /start_game first."
+      end
     end
   end
 
-  def parse_game_post_request(lines)
-    @game.num_guesses += 1
-
+  def active_game?
+    defined?(@game) != nil
   end
 
   def create_game
