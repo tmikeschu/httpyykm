@@ -3,5 +3,8 @@ module GameMechanics
     rand(0..100)
   end
 
-  
+  def compare_guess(secret, guess)
+    secret == guess
+  end
+
 end
