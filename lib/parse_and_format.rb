@@ -30,4 +30,11 @@ module ParseAndFormat
     data[:Path]
   end
 
+  def word_search(lines)
+    dictionary = File.readlines("/usr/share/dict/words")
+    formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
+    requested_word = requested_path(lines)[18..-1]
+    formatted_dictionary.include?(requested_word)? "a known" : "not a known"
+  end
+
 end

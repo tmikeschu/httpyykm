@@ -14,8 +14,10 @@ class ParseAndFormatTest < Minitest::Test
     assert_equal result, debugger(lines)
   end
 
-  def test_if_loads_the_dictionary_file
+  def test_it_loads_the_dictionary_file #let's discuss this test tomorrow
     skip
+    assert_equal "a", dictionary[0]
+    assert_equal "abandon", dictionary[45]
   end
 
 end

@@ -58,23 +58,11 @@ class RubyServer
     elsif requested_path(lines) == '/datetime'
       Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
     elsif requested_path(lines)[0..11] == '/word_search'
-      "WORD is #{word_search(lines)} word"
+      "#{(requested_path(lines)[18..-1]).upcase} is #{word_search(lines)} word"
     elsif requested_path(lines) == '/shutdown'
       server.close
       "Total Requests: #{all_requests}"
     end
-  end
-
-  def word_search(lines)
-    dictionary = File.readlines("/usr/share/dict/words")
-    formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
-    given_word = requested_path(lines)[18..-1]
-    if formatted_dictionary.include?(given_word)
-      "a known"
-    else
-      "not a known"
-    end
-    p given_word
   end
 
 end
