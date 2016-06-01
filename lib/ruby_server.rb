@@ -23,7 +23,11 @@ class RubyServer
     lines = request_lines(client)
     response = set_response_from_path(lines)
     body = "<html><head></head><body>#{response}</body></html>"
-    client.puts headers(body)
+    if requested_path(lines)[0..4] == '/game' && post?(lines)
+      client.puts headers(body, "302 redirect")
+    else
+      client.puts headers(body)
+    end
     client.puts body
     client.close
   end
@@ -36,12 +40,13 @@ class RubyServer
     received
   end
 
-  def headers(output)
-    headers = ['http/1.1 200 ok',
-               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
-               'server: ruby',
-               'content-type: text/html; charset=iso-8859-1',
-               "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+  def headers(output, responde_code = '200 ok', location = "")
+    headers = ["http/1.1 #{responde_code}",
+              "location: #{location}",
+              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+              'server: ruby',
+              'content-type: text/html; charset=iso-8859-1',
+              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
   end
 
   def keep_open
