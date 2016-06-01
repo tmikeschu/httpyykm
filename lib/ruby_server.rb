@@ -68,14 +68,29 @@ class RubyServer
     end
   end
 
-
   def set_response_for_game_paths(lines)
-    if requested_path(lines) == '/start_game'
-      game = Game.new
-      game.start_game
-    elsif requested_path(lines)[0..5] == '/game' && check_type_of_request(lines) == "GET"
-      "You've taken xx guesses."
+    if requested_path(lines) == '/start_game' && post?(lines)
+      create_game
+    elsif requested_path(lines) == '/game' && get?(lines)
+      if defined?(@game) == nil
+        "You haven't started a game yet. POST to /start_game first."
+      else
+        "You've taken #{@game.num_guesses} guesses."
+      end
     end
+  end
+
+  def create_game
+    @game = Game.new
+    @game.start_game
+  end
+
+  def post?(lines)
+    check_type_of_request(lines) == "POST"
+  end
+
+  def get?(lines)
+    check_type_of_request(lines) == "GET"
   end
 
 end
