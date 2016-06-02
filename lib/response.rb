@@ -115,7 +115,13 @@ module Response
   end
 
   def internal_error(lines)
-    "500 Internal Server Error\n\n" + "<pre>" + lines.join("\n") + "</pre>"
+    "500 Internal Server Error\n\n" + "<pre>" + error_log + "</pre>"
+  end
+
+  def error_log
+    raise "SystemError"
+    rescue => exception
+    exception.backtrace.join("\n\t")
   end
 
 end

@@ -38,7 +38,6 @@ class RubyServer
     header_assignment(body, lines, client, response)
     client.puts body
     client.close
-    raise "SystemError" if response[0..2] == '500'
   end
 
   def header_assignment(body, lines, client, response)
