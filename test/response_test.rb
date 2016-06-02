@@ -33,7 +33,6 @@ class ResponseTest < Minitest::Test
 
   def test_HTTP_response_for_game_is_unique_if_game_not_started
     response = Faraday.get 'http://127.0.0.1:9292/game'
-    @game = nil
     message = "You haven't started a game yet. POST to /start_game first."
     assert_equal message, response.body[25...83]
   end

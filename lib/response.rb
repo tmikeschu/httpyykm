@@ -10,7 +10,7 @@ module Response
   end
 
   def set_response_from_path(lines) #possible paths except game
-    if requested_path(lines) == '/' && get?(lines)
+    if requested_path(lines) == '/'
       root_path_request(lines)
     elsif requested_path(lines) == '/hello' && get?(lines)
       hello_path_request
@@ -28,11 +28,9 @@ module Response
   end
 
   def check_unauthorized_requests(lines)
-    if requested_path(lines) == '/' && post?(lines) ||
-       requested_path(lines) == '/hello' && post?(lines) ||
-       requested_path(lines) == '/datetime' && post?(lines) ||
-       requested_path(lines)[0..11] == '/word_search' && post?(lines) ||
-       requested_path(lines) == '/shutdown' && post?(lines)
+    unauthorized = %w(/hello /datetime /shutdown)
+    if post?(lines) && (requested_path(lines)[0..11] == '/word_search' ||
+       unauthorized.include?(requested_path(lines)))
        '401 Unauthorized'
     else
       set_response_for_game_paths(lines)
