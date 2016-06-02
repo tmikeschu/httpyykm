@@ -2,15 +2,17 @@ module Response
 
   def set_response_from_path(lines) #possible paths except game
     if requested_path(lines) == '/' && get?(lines)
-      root_path_request
+      root_path_request(lines)
     elsif requested_path(lines) == '/hello' && get?(lines)
       hello_path_request
     elsif requested_path(lines) == '/datetime' && get?(lines)
       datetime_path_request
     elsif requested_path(lines)[0..11] == '/word_search' && get?(lines)
-      word_search_path_request
+      word_search_path_request(lines)
     elsif requested_path(lines) == '/shutdown' && get?(lines)
       shutdown_path_request
+    elsif requested_path(lines) == '/force_error'
+      internal_error
     else
     check_unauthorized_requests(lines)
     end
@@ -69,7 +71,7 @@ module Response
     end
   end
 
-  def root_path_request
+  def root_path_request(lines)
     "<pre>" + debugger(lines) + "</pre>"
   end
 
@@ -82,7 +84,7 @@ module Response
     Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
   end
 
-  def word_search_path_request
+  def word_search_path_request(lines)
     "#{find_word(lines).upcase} is #{word_search(find_word(lines))} word"
   end
 
@@ -96,6 +98,7 @@ module Response
   end
 
   def internal_error
+    raise '500 Internal Server Error'
   end
 
 end

@@ -6,9 +6,6 @@ require './lib/game.rb'
 
 class ResponseTest < Minitest::Test
 
-
-# Add a test When you submit the POST to /start_game and there is no game in progress, it should start one and respond with a 301 redirect. -> affects header
-
   def test_if_game_has_started_a_second_post_request_gives_a_403_code
     request = Faraday.new
     response = request.post 'http://127.0.0.1:9292/start_game'
@@ -26,6 +23,12 @@ class ResponseTest < Minitest::Test
     request = Faraday.new
     response = request.post 'http://127.0.0.1:9292/hello'
     assert_equal '401 Unauthorized', response.body[25...41]
+  end
+
+  def test_that_requests_to_force_error_path_respond_with_internal_error
+    request = Faraday.new
+    response = request.get 'http://127.0.0.1:9292/force_error'
+    assert_equal '500 Internal Server Error', response.body[25...50]
   end
 
 end
