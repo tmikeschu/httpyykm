@@ -1,6 +1,6 @@
 module Response
 
-  def headers(output, responde_code = '200 ok', location = "")
+  def headers(output, responde_code = '200 OK', location = "")
     headers = ["http/1.1 #{responde_code}",
               "location: #{location}",
               "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
@@ -29,9 +29,9 @@ module Response
 
   def check_unauthorized_requests(lines)
     if requested_path(lines) == '/' && post?(lines) ||
-       requested_path(lines) == '/hello' && post?(lines)
-       requested_path(lines) == '/datetime' && post?(lines)
-       requested_path(lines)[0..11] == '/word_search' && post?(lines)
+       requested_path(lines) == '/hello' && post?(lines) ||
+       requested_path(lines) == '/datetime' && post?(lines) ||
+       requested_path(lines)[0..11] == '/word_search' && post?(lines) ||
        requested_path(lines) == '/shutdown' && post?(lines)
        '401 Unauthorized'
     else
@@ -115,7 +115,7 @@ module Response
   end
 
   def internal_error
-    raise '500 Internal Server Error'
+    '500 Internal Server Error'
   end
 
 end

@@ -19,4 +19,34 @@ class ParseAndFormatTest < Minitest::Test
     assert_equal "not a known", word_search('ahstd')
   end
 
+  def test_it_can_comb_and_assign_values_to_a_hash
+    line = ["GET / HTTP/1.1"]
+    result = {:Verb => "GET", :Path => "/", :Protocol => "HTTP/1.1"}
+    assert_equal result, comb_and_assign_to_debugger(line)
+  end
+
+  def test_it_can_format_the_hash_for_output
+    hash = {:Verb => "GET", :Path => "/", :Protocol => "HTTP/1.1"}
+    result = "Verb: GET\nPath: /\nProtocol: HTTP/1.1"
+    assert_equal result, format_for_request_output(hash)
+  end
+
+  def test_it_can_determine_the_verb_independently
+    line = ["GET / HTTP/1.1"]
+    result = "GET"
+    assert_equal result, check_type_of_request(line)
+  end
+
+  def test_it_can_determine_the_path_independently
+    line = ["GET / HTTP/1.1"]
+    result = "/"
+    assert_equal result, requested_path(line)
+  end
+
+  def test_it_can_find_the_content_length_for_a_post_request
+    line = ["POST / HTTP/1.1", "Content-Length: 44"]
+    result = 44
+    assert_equal result, find_content_length(line)
+  end
+
 end

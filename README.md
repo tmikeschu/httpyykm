@@ -2,11 +2,13 @@
 
 This project looked under the hood at HTTP GET and POST requests, utilizing a simple Ruby server to accept requests from browsers, cURL, and HTTP tools like Postman.
 
-To run the server, run `ruby httpyykm.rb` from your command line. This will run the server and keep it open until `Ctrl-C` or a GET request to the path `/shutdown` is run.
+#### Usage
+
+To run the server, from the root project folder run `ruby lib/httpyykm.rb` from your command line. This will run the server and keep it open until `Ctrl-C` or a GET request to the path `/shutdown` is run.
 
 **The server runs at address http://127.0.0.1:9292**
 
-The functionality of the server includes the following commands:
+The functionality of the server includes appropriate response codes and the following commands:
 
 **GET Requests**<br>
 * `/`
