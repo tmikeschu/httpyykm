@@ -25,4 +25,22 @@ class GameTest < Minitest::Test
     message = "You've taken 0 guesses."
     assert_equal message, game.status
   end
+
+  def test_it_can_pick_a_random_number_between_0_and_100
+    game = Game.new
+    range = (0..100).to_a
+    assert range.include?(game.rand_number)
+  end
+
+  def test_it_can_compare_two_numbers_and_provide_feedback
+    game = Game.new
+    correct = "Your guess is correct!"
+    low = "Your guess is too low."
+    high = "Your guess is too high."
+    none = "No guesses."
+    assert_equal correct, game.compare_guess(1, 1)
+    assert_equal low, game.compare_guess(5, 1)
+    assert_equal high, game.compare_guess(5, 6)
+    assert_equal none, game.compare_guess(nil, 5)
+  end
 end
