@@ -7,7 +7,7 @@ module ParseAndFormat
   end
 
   def comb_and_assign_to_debugger(lines)
-    output = Hash.new
+    output = {}
     lines.each do |line|
       if line.include?('HTTP')
         output[:Verb] = line[0...line.index('/')].strip
@@ -25,7 +25,7 @@ module ParseAndFormat
   end
 
   def format_for_request_output(output)
-    output.to_a.map {|key, value| "#{key}: #{value}"}.join("\n")
+    output.to_a.map { |key, value| "#{key}: #{value}" }.join("\n")
   end
 
   def requested_path(lines)
@@ -34,9 +34,9 @@ module ParseAndFormat
   end
 
   def word_search(word)
-    dictionary = File.readlines("/usr/share/dict/words")
+    dictionary = File.readlines('/usr/share/dict/words')
     formatted_dictionary = dictionary.map { |word| word.downcase.rstrip }
-    formatted_dictionary.include?(word)? "a known" : "not a known"
+    formatted_dictionary.include?(word) ? 'a known' : 'not a known'
   end
 
   def find_word(lines)
@@ -56,5 +56,4 @@ module ParseAndFormat
   def read_from_post_request(client, content_length)
     client.read(content_length).to_i
   end
-
 end

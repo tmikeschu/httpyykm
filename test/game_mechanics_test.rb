@@ -13,8 +13,10 @@ class GameMechanicsTest < Minitest::Test
     correct = "Your guess is correct!"
     low = "Your guess is too low."
     high = "Your guess is too high."
+    none = "No guesses."
     assert_equal correct, compare_guess(1, 1)
     assert_equal low, compare_guess(5, 1)
     assert_equal high, compare_guess(5, 6)
+    assert_equal none, compare_guess(nil, 5)
   end
 end

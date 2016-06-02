@@ -1,12 +1,11 @@
 require './lib/game_mechanics'
-require './lib/parse_and_format'
 
 class Game
   attr_accessor :num_guesses,
                 :guess
   attr_reader   :secret_number
 
-  include GameMechanics, ParseAndFormat
+  include GameMechanics
 
   def initialize
     @num_guesses = 0

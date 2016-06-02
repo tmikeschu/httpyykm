@@ -1,5 +1,14 @@
 module Response
 
+  def headers(output, responde_code = '200 ok', location = "")
+    headers = ["http/1.1 #{responde_code}",
+              "location: #{location}",
+              "date: #{Time.now.strftime('%a, %e %b %Y %H:%M:%S %z')}",
+              'server: ruby',
+              'content-type: text/html; charset=iso-8859-1',
+              "content-length: #{output.length}\r\n\r\n"].join("\r\n")
+  end
+
   def set_response_from_path(lines) #possible paths except game
     if requested_path(lines) == '/' && get?(lines)
       root_path_request(lines)
@@ -14,7 +23,7 @@ module Response
     elsif requested_path(lines) == '/force_error'
       internal_error
     else
-    check_unauthorized_requests(lines)
+      check_unauthorized_requests(lines)
     end
   end
 
@@ -42,6 +51,14 @@ module Response
     end
   end
 
+  def post?(lines)
+    check_type_of_request(lines) == "POST"
+  end
+
+  def get?(lines)
+    check_type_of_request(lines) == "GET"
+  end
+
   def post_request_start_game_path
     if active_game?
       '403 Forbidden'
@@ -56,8 +73,8 @@ module Response
 
   def get_request_game_path
     if active_game?
-      @game.status + "\n\n" +
-      @game.compare_guess(@game.secret_number, @game.guess)
+      game.status + "\n\n" +
+      game.compare_guess(game.secret_number, game.guess)
     else
       "You haven't started a game yet. POST to /start_game first."
     end
@@ -65,7 +82,7 @@ module Response
 
   def post_request_game_path
     if active_game?
-      @game.num_guesses += 1
+      game.num_guesses += 1
     else
       "You haven't started a game yet. POST to /start_game first."
     end
