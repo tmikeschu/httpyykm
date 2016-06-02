@@ -1,6 +1,7 @@
 require 'socket'
 require './lib/parse_and_format'
 require './lib/game'
+require './lib/response'
 
 class RubyServer
   attr_reader :server,
@@ -9,6 +10,7 @@ class RubyServer
               :all_requests
 
   include ParseAndFormat
+  include Response
 
   def initialize(port = 9292)
     @server = TCPServer.new(port)
@@ -57,46 +59,48 @@ class RubyServer
     end
   end
 
-  def set_response_from_path(lines)
-    if requested_path(lines) == '/'
-      "<pre>" + debugger(lines) + "</pre>"
-    elsif requested_path(lines) == '/hello'
-      @hello_requests += 1
-      "Hello, World! (#{hello_requests})"
-    elsif requested_path(lines) == '/datetime'
-      Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
-    elsif requested_path(lines)[0..11] == '/word_search'
-      "#{find_word(lines).upcase} is #{word_search(find_word(lines))} word"
-    elsif requested_path(lines) == '/shutdown'
-      server.close
-      "Total Requests: #{all_requests}"
-    else
-      set_response_for_game_paths(lines)
-    end
-  end
+  # def set_response_from_path(lines)
+  #   if requested_path(lines) == '/'
+  #     "<pre>" + debugger(lines) + "</pre>"
+  #   elsif requested_path(lines) == '/hello'
+  #     @hello_requests += 1
+  #     "Hello, World! (#{hello_requests})"
+  #   elsif requested_path(lines) == '/datetime'
+  #     Time.now.strftime("%I:%M%p on %A, %B %d, %Y")
+  #   elsif requested_path(lines)[0..11] == '/word_search'
+  #     "#{find_word(lines).upcase} is #{word_search(find_word(lines))} word"
+  #   elsif requested_path(lines) == '/shutdown'
+  #     server.close
+  #     "Total Requests: #{all_requests}"
+  #   else
+  #     set_response_for_game_paths(lines)
+  #   end
+  # end
+  #
+  # def set_response_for_game_paths(lines)
+  #   if requested_path(lines) == '/start_game' && post?(lines)
+  #     create_game
+  #   elsif requested_path(lines) == '/game' && get?(lines)
+  #     if active_game?
+  #       @game.status + "\n\n" +
+  #       @game.compare_guess(@game.secret_number, @game.guess)
+  #     else
+  #       "You haven't started a game yet. POST to /start_game first."
+  #     end
+  #   elsif requested_path(lines)[0..4] == '/game' && post?(lines)
+  #     if active_game?
+  #       @game.num_guesses += 1
+  #     else
+  #       "You haven't started a game yet. POST to /start_game first."
+  #     end
+  #   else
+  #     "404 Not Found"
+  #   end
+  # end
 
-  def set_response_for_game_paths(lines)
-    if requested_path(lines) == '/start_game' && post?(lines)
-      create_game
-    elsif requested_path(lines) == '/game' && get?(lines)
-      if active_game?
-        @game.status + "\n\n" +
-        @game.compare_guess(@game.secret_number, @game.guess)
-      else
-        "You haven't started a game yet. POST to /start_game first."
-      end
-    elsif requested_path(lines)[0..4] == '/game' && post?(lines)
-      if active_game?
-        @game.num_guesses += 1
-      else
-        "You haven't started a game yet. POST to /start_game first."
-      end
-    end
-  end
-
-  def active_game?
-    defined?(@game) != nil
-  end
+  # def active_game?
+  #   defined?(@game) != nil
+  # end
 
   def check_and_set_guess(lines, user_guess)
     @game.guess = user_guess if active_game? && post?(lines)

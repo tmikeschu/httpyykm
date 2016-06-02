@@ -1,16 +1,28 @@
 module Response
 
   def set_response_from_path(lines) #possible paths except game
-    if requested_path(lines) == '/'
+    if requested_path(lines) == '/' && get?(lines)
       root_path_request
-    elsif requested_path(lines) == '/hello'
+    elsif requested_path(lines) == '/hello' && get?(lines)
       hello_path_request
-    elsif requested_path(lines) == '/datetime'
+    elsif requested_path(lines) == '/datetime' && get?(lines)
       datetime_path_request
-    elsif requested_path(lines)[0..11] == '/word_search'
+    elsif requested_path(lines)[0..11] == '/word_search' && get?(lines)
       word_search_path_request
-    elsif requested_path(lines) == '/shutdown'
+    elsif requested_path(lines) == '/shutdown' && get?(lines)
       shutdown_path_request
+    else
+    check_unauthorized_requests(lines)
+    end
+  end
+
+  def check_unauthorized_requests(lines)
+    if requested_path(lines) == '/' && post?(lines) ||
+       requested_path(lines) == '/hello' && post?(lines)
+       requested_path(lines) == '/datetime' && post?(lines)
+       requested_path(lines)[0..11] == '/word_search' && post?(lines)
+       requested_path(lines) == '/shutdown' && post?(lines)
+       '401 Unauthorized'
     else
       set_response_for_game_paths(lines)
     end
@@ -79,25 +91,9 @@ module Response
     "Total Requests: #{all_requests}"
   end
 
-  def ok
-    "200 OK"
-  end
-
-  def moved_permanenty
+  def moved_permanenty #haven't used this method yet
     "301 Moved Permanently"
   end
-
-  def unauthorized
-    "404 Not Found"
-  end
-
-  # def forbidden
-  #   "403 Forbidden"
-  # end
-
-  # def not_found
-  #   "404 Not Found"
-  # end
 
   def internal_error
   end
