@@ -63,7 +63,7 @@ module Response
     if active_game?
       '403 Forbidden'
     else
-      create_game
+      create_game && 'Good luck!'
     end
   end
 
