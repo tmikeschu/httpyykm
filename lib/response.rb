@@ -21,7 +21,7 @@ module Response
     elsif requested_path(lines) == '/shutdown' && get?(lines)
       shutdown_path_request
     elsif requested_path(lines) == '/force_error'
-      internal_error
+      internal_error(lines)
     else
       check_unauthorized_requests(lines)
     end
@@ -114,8 +114,8 @@ module Response
     "301 Moved Permanently"
   end
 
-  def internal_error
-    '500 Internal Server Error'
+  def internal_error(lines)
+    "500 Internal Server Error\n\n" + "<pre>" + lines.join("\n") + "</pre>"
   end
 
 end
