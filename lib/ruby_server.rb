@@ -38,6 +38,7 @@ class RubyServer
     header_assignment(body, lines, client, response)
     client.puts body
     client.close
+    raise "SystemError" if response[0..2] == '500'
   end
 
   def header_assignment(body, lines, client, response)
@@ -51,7 +52,7 @@ class RubyServer
       client.puts headers(body, '403 Forbidden')
     elsif response == '404 Not Found'
       client.puts headers(body, '404 Not Found')
-    elsif response == '500 Internal Server Error'
+    elsif response[0..2] == '500'
       client.puts headers(body, '500 Internal Server Error')
     else
       client.puts headers(body)
