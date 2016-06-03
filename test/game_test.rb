@@ -32,15 +32,25 @@ class GameTest < Minitest::Test
     assert range.include?(game.rand_number)
   end
 
-  def test_it_can_compare_two_numbers_and_provide_feedback
+  def test_it_can_compare_two_numbers_and_provide_feedback_if_correct_or_nil
     game = Game.new
     correct = 'Your guess is correct!'
-    low = 'Your guess is too low.'
-    high = 'Your guess is too high.'
     none = 'No guesses.'
-    assert_equal correct, game.compare_guess(1, 1)
-    assert_equal low, game.compare_guess(5, 1)
-    assert_equal high, game.compare_guess(5, 6)
-    assert_equal none, game.compare_guess(nil, 5)
+    assert_equal correct, game.compare_guess(1, "1")
+    assert_equal none, game.compare_guess(nil, "5")
+  end
+
+  def test_it_compares_two_numbers_and_reports_if_too_low_or_too_high
+    game = Game.new
+    low = 'Your guess is too low.'
+    assert_equal low, game.compare_guess(4, "1")
+    high = 'Your guess is too high.'
+    assert_equal high, game.compare_guess(45, "90")
+  end
+
+  def test_if_guessed_num_includes_any_non_numerical_chars_special_message
+    game = Game.new
+    response = "Guess a number only, please."
+    assert_equal response, game.compare_guess(46, "4a")
   end
 end
