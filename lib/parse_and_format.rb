@@ -54,6 +54,6 @@ module ParseAndFormat
   end
 
   def read_from_post_request(client, content_length)
-    client.read(content_length).to_i
+    client.read(content_length)
   end
 end

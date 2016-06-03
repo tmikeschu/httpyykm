@@ -28,7 +28,7 @@ module Response
     elsif requested_path(lines) == '/shutdown' && get?(lines)
       shutdown_path_request
     elsif requested_path(lines) == '/force_error'
-      internal_error(lines)
+      internal_error
     else
       check_unauthorized_requests(lines)
     end
@@ -93,8 +93,8 @@ module Response
     end
   end
 
-  def root_path_request(_lines)
-    '<pre>' + + '</pre>'
+  def root_path_request(lines)
+    '<pre>' + debugger(lines) + '</pre>'
   end
 
   def hello_path_request
@@ -115,7 +115,7 @@ module Response
     "Total Requests: #{all_requests}"
   end
 
-  def internal_error(_lines)
+  def internal_error
     "500 Internal Server Error\n\n" + '<pre>' + error_log + '</pre>'
   end
 
