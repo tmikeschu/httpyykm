@@ -43,16 +43,8 @@ class RubyServer
   def header_assignment(body, lines, client, response)
     if requested_path(lines) == '/game?guess' && post?(lines)
       client.puts headers(body, "302 Redirect", 'http://127.0.0.1:9292/game')
-    elsif response == 'Good luck!'
-      client.puts headers(body, '301 Moved Permanently')
-    elsif response == '401 Unauthorized'
-      client.puts headers(body, '401 Unauthorized')
-    elsif response == '403 Forbidden'
-      client.puts headers(body, '403 Forbidden')
-    elsif response == '404 Not Found'
-      client.puts headers(body, '404 Not Found')
-    elsif response[0..2] == '500'
-      client.puts headers(body, '500 Internal Server Error')
+    elsif select_http_status_codes.key?(response[0..2])
+      client.puts headers(body, select_http_status_codes[response[0..2]])
     else
       client.puts headers(body)
     end
