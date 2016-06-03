@@ -20,7 +20,7 @@ class RubyServer
   end
 
   def keep_open
-    while true
+    loop do
       process_request
     end
   end
@@ -42,7 +42,7 @@ class RubyServer
 
   def header_assignment(body, lines, client, response)
     if requested_path(lines) == '/game?guess' && post?(lines)
-      client.puts headers(body, "302 Redirect", 'http://127.0.0.1:9292/game')
+      client.puts headers(body, '302 Redirect', 'http://127.0.0.1:9292/game')
     elsif select_http_status_codes.key?(response[0..2])
       client.puts headers(body, select_http_status_codes[response[0..2]])
     else
@@ -52,7 +52,7 @@ class RubyServer
 
   def request_lines(client)
     received = []
-    while line = client.gets and !line.chomp.empty?
+    while (line = client.gets) && !line.chomp.empty?
       received << line.chomp
     end
     received
@@ -66,5 +66,4 @@ class RubyServer
   def check_and_set_guess(lines, user_guess)
     game.guess = user_guess if active_game? && post?(lines)
   end
-
 end
