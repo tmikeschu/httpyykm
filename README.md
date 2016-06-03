@@ -30,6 +30,8 @@ The functionality of the server includes appropriate response codes and the foll
   * Responds with `WORD if a known word` or `WORD is not a known word` depending on the results of a search through the built-in Mac OS dictionary file
 * `/game`
   * If a game has been started, it will respond with how many guesses have been taken and whether the most recent guess was too low or too high.
+* `/force_error`
+  * Keeps the server running but issues a SystemError and displays the backtrace.
 
 **POST Requests**<br>
 * `/`
