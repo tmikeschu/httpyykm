@@ -38,25 +38,21 @@ class RubyServerTest < Minitest::Test
   # Note: RubyServer must be running separately for the following tests to pass
 
   def test_it_responds_to_an_HTTP_request
-    # request = Faraday.new
     response = Faraday.get 'http://127.0.0.1:9292'
     assert_instance_of String, response.body
   end
 
   def test_if_root_is_requested_HTTP_responds_with_full_debug
-    # request = Faraday.new
     response = Faraday.get 'http://127.0.0.1:9292'
     refute_equal 'Hello, World!', response.body[25...38]
   end
 
   def test_if_root_hello_is_requested_HTTP_responds_with_hello_counter_only
-    # request = Faraday.new
     response = Faraday.get 'http://127.0.0.1:9292/hello'
     assert_equal 'Hello, World!', response.body[25...38]
   end
 
   def test_it_can_take_a_word_parameter_and_search_the_dictionary
-    # request = Faraday.new
     response = Faraday.get 'http://127.0.0.1:9292/word_search?word=tree'
     assert_equal 'TREE is a known word', response.body[25...45]
     response = Faraday.get 'http://127.0.0.1:9292/word_search?word=appl'

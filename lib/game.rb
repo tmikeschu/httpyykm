@@ -23,9 +23,9 @@ class Game
   end
 
   def compare_guess(secret, guess)
-    return "No guesses." if secret == nil || guess == nil
-    return "Your guess is correct!" if secret == guess
-    secret > guess ? difference = "too low." : difference = "too high."
+    return 'No guesses.' if secret.nil? || guess.nil?
+    return 'Your guess is correct!' if secret == guess
+    difference = secret > guess ? 'too low.' : 'too high.'
     "Your guess is #{difference}"
   end
 end

@@ -34,10 +34,10 @@ class GameTest < Minitest::Test
 
   def test_it_can_compare_two_numbers_and_provide_feedback
     game = Game.new
-    correct = "Your guess is correct!"
-    low = "Your guess is too low."
-    high = "Your guess is too high."
-    none = "No guesses."
+    correct = 'Your guess is correct!'
+    low = 'Your guess is too low.'
+    high = 'Your guess is too high.'
+    none = 'No guesses.'
     assert_equal correct, game.compare_guess(1, 1)
     assert_equal low, game.compare_guess(5, 1)
     assert_equal high, game.compare_guess(5, 6)
