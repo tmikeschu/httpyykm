@@ -9,7 +9,15 @@ module Response
               "content-length: #{output.length}\r\n\r\n"].join("\r\n")
   end
 
-  def set_response_from_path(lines) #possible paths except game
+  def select_http_status_codes
+    {'Goo' => '301 Moved Permanently',
+     '401' => '401 Unauthorized',
+     '403' => '403 Forbidden',
+     '404' => '404 Not Found',
+     '500' => '500 Internal Server Error'}
+  end
+
+  def set_response_from_path(lines)
     if requested_path(lines) == '/'
       root_path_request(lines)
     elsif requested_path(lines) == '/hello' && get?(lines)
