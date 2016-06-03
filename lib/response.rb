@@ -61,7 +61,7 @@ module Response
     if active_game?
       '403 Forbidden'
     else
-      create_game && 'Good luck!'
+      'Good luck!' && create_game
     end
   end
 
@@ -106,10 +106,6 @@ module Response
   def shutdown_path_request
     server.close
     "Total Requests: #{all_requests}"
-  end
-
-  def moved_permanenty #haven't used this method yet
-    "301 Moved Permanently"
   end
 
   def internal_error(lines)
