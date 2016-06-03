@@ -49,6 +49,7 @@ class ResponseTest < Minitest::Test
   end
 
   def test_HTTP_response_for_num_guesses
+    response = Faraday.post 'http://127.0.0.1:9292/start_game'
     response = Faraday.get 'http://127.0.0.1:9292/game'
     message = "You've taken 0 guesses."
     assert_equal message, response.body[25...48]
