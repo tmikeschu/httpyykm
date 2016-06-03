@@ -49,10 +49,21 @@ class ResponseTest < Minitest::Test
   end
 
   def test_HTTP_response_for_num_guesses
+    response = Faraday.post 'http://127.0.0.1:9292/start_game'
     response = Faraday.get 'http://127.0.0.1:9292/game'
     message = "You've taken 0 guesses."
     assert_equal message, response.body[25...48]
   end
+
+  # def test_HTTP_response_for_num_guesses
+  #   response = Faraday.post 'http://127.0.0.1:9292/start_game'
+  #   response.get_request_game_path
+  #   # response = Faraday.get 'http://127.0.0.1:9292/game'
+  #   message = "You've taken 0 guesses."
+  #   assert_equal message, response.get_request_game_path
+  # end
+
+  # get_request_game_path
 
   def test_it_has_a_hash_for_select_http_status_codes
     assert_equal '401 Unauthorized', select_http_status_codes['401']
